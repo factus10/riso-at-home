@@ -37,6 +37,11 @@
             <p>No image loaded</p>
             <button onclick="chooseImage()">Choose Image&hellip;</button>
           </div>
+          <div id="loading-overlay">
+            <div class="spinner"></div>
+            <p>Processing&hellip;</p>
+            <p class="hint">Larger images can take a while.</p>
+          </div>
         </div>
         <div id="sidebar">
           <div class="field">
@@ -209,6 +214,15 @@
     <!-- p5riso@home script below -->
     <script>
 
+        // draw()'s processing loops are synchronous and block the main
+        // thread, so the browser never gets a chance to paint the loading
+        // overlay we show beforehand unless we explicitly yield to it
+        // first. This flag makes the first draw() call after setup() a
+        // no-op that just defers to a later frame (via redraw()), so the
+        // overlay has a chance to actually render before the heavy work
+        // starts on the frame after.
+        let readyToProcess = false;
+
         let img;
         let blueInk;
         let pinkInk;
@@ -308,6 +322,7 @@
           document.getElementById("numberOffsetlayers").value = parseInt(paramOffsetSize);
 
           if (paramFilename) {
+            document.getElementById('loading-overlay').style.display = 'flex';
             img = loadImage('data/' + paramFilename);
           }
 
@@ -482,9 +497,16 @@
 
           if (!img) return;
 
+          if (!readyToProcess) {
+            readyToProcess = true;
+            requestAnimationFrame(() => requestAnimationFrame(() => redraw()));
+            return;
+          }
+          readyToProcess = false;
+
           urlParamsString = window.location.search;
           urlParams = new URLSearchParams(urlParamsString);
-          
+
           fetchUrlParams();
 
           if (paramBooleanOffsetlayers == false || paramBooleanOffsetlayers == 'false'){
@@ -527,6 +549,8 @@
           } else {
             addWhiteSpots(paramWhiteSpotsSize, img.width, img.height);
           }
+
+          document.getElementById('loading-overlay').style.display = 'none';
         }
 
         function downloadCanvas() {
@@ -569,6 +593,10 @@
         }
 
         function refreshImage() {
+          if (document.getElementById('textFilename').value) {
+            document.getElementById('loading-overlay').style.display = 'flex';
+          }
+
           paramBooleanHalftone = document.getElementById('radioHalftone').checked;
           paramBooleanDither = document.getElementById('radioDither').checked;
           paramBooleanNoHalftoneDither = document.getElementById('radioNoHalftoneDither').checked;
