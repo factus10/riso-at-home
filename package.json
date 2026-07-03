@@ -1,7 +1,7 @@
 {
   "name": "riso-at-home",
   "productName": "Riso at Home",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Desktop app that mimics a risograph print effect on a home printer, based on p5.riso@home by Jason Li.",
   "main": "main.js",
   "private": true,
