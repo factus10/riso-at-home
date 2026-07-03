@@ -1,0 +1,48 @@
+{
+  "name": "riso-at-home",
+  "productName": "Riso at Home",
+  "version": "1.0.0",
+  "description": "Desktop app that mimics a risograph print effect on a home printer, based on p5.riso@home by Jason Li.",
+  "main": "main.js",
+  "private": true,
+  "author": "David Anderson",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/factus10/riso-at-home.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.risoathome.app",
+    "productName": "Riso at Home",
+    "afterPack": "./afterPack.js",
+    "directories": {
+      "output": "/tmp/riso-at-home-build"
+    },
+    "dmg": {
+      "artifactName": "${productName}-${version}-${arch}.dmg"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "server.js",
+      "www/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64", "x64"]
+        }
+      ]
+    }
+  }
+}
