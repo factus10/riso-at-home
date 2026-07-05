@@ -29,6 +29,8 @@ npm run dist
 
 Produces signed, notarized `.dmg` files for both Apple Silicon (`arm64`) and Intel (`x64`) under `/tmp/riso-at-home-build` (kept outside this project's directory since it lives under iCloud Drive sync, which otherwise races with `codesign`).
 
+If signing or notarization fails, see [CLAUDE.md](CLAUDE.md) for one-time setup steps and a troubleshooting guide covering the specific (misleading) errors this project has hit before.
+
 ## Credits
 
 Built on [p5.riso@home](https://github.com/adrawerofthings/p5.risoAtHome) by Jason Li, which in turn builds on [p5.Riso.js](https://antiboredom.github.io/p5.riso/) by Sam Lavigne and Tega Brain, and [riso@home](https://github.com/jywarren/risoAtHome/) by Jeffrey Warren.
